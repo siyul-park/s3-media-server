@@ -1,4 +1,4 @@
-import * as AWS from "@aws-sdk/client-s3";
+import * as AWS from "aws-sdk";
 import S3Repository from "./s3-repository";
 
 class S3RepositoryFactory {
