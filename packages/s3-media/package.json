@@ -40,6 +40,7 @@
     "koa": "^2.13.0",
     "koa-change-case": "^1.0.2",
     "koa-router": "^10.0.0",
-    "mock-aws-s3": "^4.0.1"
+    "mock-aws-s3": "^4.0.1",
+    "tmp-promise": "^3.0.2"
   }
 }
