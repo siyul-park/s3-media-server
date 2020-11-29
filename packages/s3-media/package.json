@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "run": "node dist/index.js",
     "test": "jest --forceExit",
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf ./dist",
