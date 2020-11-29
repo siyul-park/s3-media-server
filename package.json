@@ -11,7 +11,7 @@
     "build": "lerna run build",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
-    "test": "jest",
+    "test": "lerna run test",
     "clean": "lerna run clean",
     "package:publish": "lerna publish",
     "package:init": "./scripts/init-package.sh"
@@ -36,8 +36,8 @@
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "jest": "^26.4.2",
     "husky": "^4.2.5",
+    "jest": "^26.4.2",
     "lerna": "^3.22.1",
     "prettier": "^2.1.1",
     "ts-jest": "^26.3.0",
