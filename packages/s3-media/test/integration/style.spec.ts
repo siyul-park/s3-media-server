@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe("POST /styles/:style_id/:file_id", () => {
-  test("success", async () => {
+  test("success: get original", async () => {
     const img = await fs.promises.readFile(
       path.join(__dirname, "../assets/image/upload-test-image.png")
     );
@@ -22,5 +22,19 @@ describe("POST /styles/:style_id/:file_id", () => {
       .expect(200);
 
     await request.get(fileInfo.links[0].href).expect(302);
+  });
+
+  test("success: get thumbnail", async () => {
+    const img = await fs.promises.readFile(
+      path.join(__dirname, "../assets/image/upload-test-image.png")
+    );
+
+    const { body: fileInfo } = await request
+      .post("/files/upload")
+      .set("content-type", "application/octet-stream")
+      .send(img)
+      .expect(200);
+
+    await request.get(`/styles/thumbnail/${fileInfo.id}`).expect(302);
   });
 });
