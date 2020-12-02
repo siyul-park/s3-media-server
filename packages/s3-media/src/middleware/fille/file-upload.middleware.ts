@@ -1,6 +1,7 @@
 import Application, { DefaultState } from "koa";
 
 import fs from "fs";
+import uniqid from "uniqid";
 import Context from "../../type/context";
 import Uploader from "../../service/uploader";
 import Token from "../../service/token";
@@ -8,6 +9,7 @@ import tmpPath from "../../service/tmp/tmpPath";
 import pipeline from "../../service/stream/pipeline";
 import unlink from "../../service/fs/unlink";
 import convertInfoToRelational from "../../service/converter/convert-info-to-relational";
+import FileKey from "../../type/file-key";
 
 const fileUploadMiddleware: Application.Middleware<
   DefaultState,
@@ -20,7 +22,7 @@ const fileUploadMiddleware: Application.Middleware<
     const stream = fs.createWriteStream(filePath);
     await pipeline([context.req, stream]);
 
-    const originalKey = "original";
+    const originalKey = new FileKey("original", uniqid());
 
     const fileInfo = await uploader.upload(originalKey, filePath);
 

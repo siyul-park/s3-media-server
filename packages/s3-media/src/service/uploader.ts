@@ -1,7 +1,6 @@
 import { inject, injectable } from "@cheeket/injector";
 import * as fs from "fs";
 import sharp from "sharp";
-import uniqid from "uniqid";
 
 import S3Token from "../s3/token";
 import Token from "./token";
@@ -14,6 +13,7 @@ import Style from "./style/style";
 import unlink from "./fs/unlink";
 import convertInfoToMeta from "./converter/convert-info-to-meta";
 import FileInfo from "../type/file-info";
+import FileKey from "../type/file-key";
 
 @injectable()
 class Uploader {
@@ -23,8 +23,8 @@ class Uploader {
     private readonly styleRepository: JsonRepository<Style>
   ) {}
 
-  async upload(where: string, path: string, id?: string): Promise<S3FileInfo> {
-    const style = await this.styleRepository.fetch(where);
+  async upload(fileKey: FileKey, path: string): Promise<S3FileInfo> {
+    const style = await this.styleRepository.fetch(fileKey.style);
 
     const resizedFilePath = await tmpPath();
 
@@ -32,16 +32,15 @@ class Uploader {
       await sharp(path).resize(style).toFile(resizedFilePath);
 
       const fileInfoMeta = await getFileInfoMeta(resizedFilePath);
-      const fileInfoPrimary = { id: id ?? uniqid() };
+      const fileInfoPrimary = { id: fileKey.id };
       const fileInfo: FileInfo = { ...fileInfoMeta, ...fileInfoPrimary };
 
       const readableStream = fs.createReadStream(resizedFilePath);
 
       const contentType = fileInfo.type;
 
-      const key = `${where}/${fileInfo.id}`;
       const response = await this.s3Repository.upload({
-        Key: key,
+        Key: fileKey.id,
         Body: readableStream,
         ContentLength: fileInfo.size,
         ContentType: contentType,
