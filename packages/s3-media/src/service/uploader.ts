@@ -40,7 +40,7 @@ class Uploader {
       const contentType = fileInfo.type;
 
       const response = await this.s3Repository.upload({
-        Key: fileKey.id,
+        Key: fileKey.key,
         Body: readableStream,
         ContentLength: fileInfo.size,
         ContentType: contentType,
