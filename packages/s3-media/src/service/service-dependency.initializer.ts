@@ -20,7 +20,7 @@ class ServiceDependencyInitializer implements Initializer {
     container.bind(Token.STYLE_REPOSITORY, this.styleRepositoryProvider);
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this,@typescript-eslint/no-unused-vars
   initContextContainer(container: interfaces.Container): void {}
 }
 

@@ -1,4 +1,4 @@
-import AWS, {S3} from "aws-sdk";
+import AWS, { S3 } from "aws-sdk";
 
 class S3Repository {
   constructor(public readonly s3: AWS.S3, public readonly bucketName: string) {}

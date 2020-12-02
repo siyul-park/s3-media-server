@@ -39,7 +39,7 @@ class S3DependencyInitializer implements Initializer {
     container.bind(Token.S3_REPOSITORY, this.s3Repository);
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this,@typescript-eslint/no-unused-vars
   initContextContainer(container: interfaces.Container): void {}
 }
 

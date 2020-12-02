@@ -21,7 +21,7 @@ async function getFileInfo(path: string): Promise<FileInfo> {
     type,
     size,
     width: meta.width,
-    height: meta.height
+    height: meta.height,
   };
 }
 
