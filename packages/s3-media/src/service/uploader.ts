@@ -11,6 +11,7 @@ import getFileInfo from "./get-file-info";
 import tmpPath from "./tmp/tmpPath";
 import Style from "./style/style";
 import unlink from "./fs/unlink";
+import convertInfoToMeta from "./converter/convert-info-to-meta";
 
 @injectable()
 class Uploader {
@@ -25,28 +26,32 @@ class Uploader {
 
     const resizedFilePath = await tmpPath();
 
-    await sharp(path).resize(style).toFile(resizedFilePath);
+    try {
+      await sharp(path).resize(style).toFile(resizedFilePath);
 
-    const fileInfo = await getFileInfo(resizedFilePath);
-    const readableStream = fs.createReadStream(resizedFilePath);
+      const fileInfo = await getFileInfo(resizedFilePath);
+      const readableStream = fs.createReadStream(resizedFilePath);
 
-    const contentType = fileInfo.type;
+      const contentType = fileInfo.type;
 
-    const key = `${where}/${fileInfo.id}`;
-    const response = await this.s3Repository.upload({
-      Key: key,
-      Body: readableStream,
-      ContentLength: fileInfo.size,
-      ContentType: contentType,
-    });
+      const key = `${where}/${fileInfo.id}`;
+      const response = await this.s3Repository.upload({
+        Key: key,
+        Body: readableStream,
+        ContentLength: fileInfo.size,
+        ContentType: contentType,
+        Metadata: convertInfoToMeta(fileInfo),
+      });
 
-    await unlink(resizedFilePath);
-
-    return {
-      ...fileInfo,
-      key: response.Key,
-      bucket: response.Bucket,
-    };
+      return {
+        ...fileInfo,
+        key: response.Key,
+        bucket: response.Bucket,
+        location: response.Location,
+      };
+    } finally {
+      await unlink(resizedFilePath);
+    }
   }
 }
 

@@ -7,6 +7,7 @@ import Token from "../../service/token";
 import tmpPath from "../../service/tmp/tmpPath";
 import pipeline from "../../service/stream/pipeline";
 import unlink from "../../service/fs/unlink";
+import convertInfoToRelational from "../../service/converter/convert-info-to-relational";
 
 const fileUploadMiddleware: Application.Middleware<
   DefaultState,
@@ -15,12 +16,20 @@ const fileUploadMiddleware: Application.Middleware<
   const uploader: Uploader = await context.resolve(Token.UPLOADER);
 
   const filePath = await tmpPath();
-  const stream = fs.createWriteStream(filePath);
-  await pipeline([context.req, stream]);
+  try {
+    const stream = fs.createWriteStream(filePath);
+    await pipeline([context.req, stream]);
 
-  context.body = await uploader.upload(filePath, "original");
+    const originalKey = "original";
 
-  await unlink(filePath);
+    const fileInfo = await uploader.upload(filePath, originalKey);
+
+    context.body = convertInfoToRelational(fileInfo, [
+      { relation: "self", href: `/${originalKey}/${fileInfo.id}` },
+    ]);
+  } finally {
+    await unlink(filePath);
+  }
 
   await next();
 };
