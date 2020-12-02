@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "run": "node dist/index.js",
-    "test": "jest --forceExit",
+    "test": "cross-env NODE_ENV=test jest --forceExit",
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf ./dist",
     "compile": "tsc",
@@ -39,6 +39,7 @@
     "@cheeket/koa": "^1.0.0-alpha.1",
     "aws-sdk": "^2.802.0",
     "cheeket": "^2.3.4",
+    "dotenv": "^8.2.0",
     "file-type": "^16.0.1",
     "got": "^11.8.0",
     "koa": "^2.13.0",

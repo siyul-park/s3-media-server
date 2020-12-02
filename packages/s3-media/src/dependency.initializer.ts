@@ -1,13 +1,12 @@
 import { Initializer } from "@cheeket/koa";
 import { interfaces } from "cheeket";
+
 import S3DependencyInitializer from "./s3/s3-dependency.initializer";
 import ServiceDependencyInitializer from "./service/service-dependency.initializer";
+import configurationProvider from "./configuration/configuration.provider";
 
 class DependencyInitializer implements Initializer {
-  private readonly s3DependencyInitializer = new S3DependencyInitializer({
-    useMock: true,
-    bucketName: "test/assets",
-  });
+  private readonly s3DependencyInitializer = new S3DependencyInitializer(configurationProvider());
 
   private readonly serviceDependencyInitializer = new ServiceDependencyInitializer();
 

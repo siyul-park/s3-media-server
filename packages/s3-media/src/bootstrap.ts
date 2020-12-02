@@ -4,10 +4,12 @@ import { Server } from "net";
 import Application from "koa";
 import dependency from "@cheeket/koa";
 import { setGracefulCleanup } from "tmp-promise";
+import dotenv from "dotenv";
 
 import DependencyInitializer from "./dependency.initializer";
 import router from "./router";
 
+dotenv.config();
 setGracefulCleanup();
 
 async function bootstrap(port?: number): Promise<Server> {

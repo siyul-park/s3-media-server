@@ -1,20 +1,15 @@
 import { Initializer } from "@cheeket/koa";
 import { inContainerScope, interfaces } from "cheeket";
-import * as AWS from "aws-sdk";
 
 import Token from "./token";
 import s3Provider from "./s3.provider";
 import s3MockProvider from "./s3-mock.provider";
 import s3RepositoryFactoryProvider from "./s3-repository-factory.provider";
 import s3RepositoryProvider from "./s3-repository.provider";
+import S3Configuration from "./s3.configuration";
 
 class S3DependencyInitializer implements Initializer {
-  constructor(
-    private readonly configuration: Partial<AWS.S3.ClientConfiguration> & {
-      useMock?: boolean;
-      bucketName: string;
-    }
-  ) {}
+  constructor(private readonly configuration: S3Configuration) {}
 
   private readonly s3Provider = inContainerScope(
     this.configuration.useMock
