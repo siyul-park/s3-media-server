@@ -6,7 +6,9 @@ import ServiceDependencyInitializer from "./service/service-dependency.initializ
 import configurationProvider from "./configuration/configuration.provider";
 
 class DependencyInitializer implements Initializer {
-  private readonly s3DependencyInitializer = new S3DependencyInitializer(configurationProvider());
+  private readonly s3DependencyInitializer = new S3DependencyInitializer(
+    configurationProvider()
+  );
 
   private readonly serviceDependencyInitializer = new ServiceDependencyInitializer();
 
