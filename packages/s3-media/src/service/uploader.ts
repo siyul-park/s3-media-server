@@ -7,11 +7,13 @@ import Token from "./token";
 import S3Repository from "../s3/s3-repository";
 import JsonRepository from "../s3/json-repository";
 import S3FileInfo from "../type/s3-file-info";
-import getFileInfo from "./get-file-info";
+import getFileInfoMeta from "./get-file-info-meta";
 import tmpPath from "./tmp/tmpPath";
 import Style from "./style/style";
 import unlink from "./fs/unlink";
 import convertInfoToMeta from "./converter/convert-info-to-meta";
+import FileInfo from "../type/file-info";
+import FileKey from "../type/file-key";
 
 @injectable()
 class Uploader {
@@ -21,22 +23,24 @@ class Uploader {
     private readonly styleRepository: JsonRepository<Style>
   ) {}
 
-  async upload(path: string, where: string): Promise<S3FileInfo> {
-    const style = await this.styleRepository.fetch(where);
+  async upload(fileKey: FileKey, path: string): Promise<S3FileInfo> {
+    const style = await this.styleRepository.fetch(fileKey.style);
 
     const resizedFilePath = await tmpPath();
 
     try {
       await sharp(path).resize(style).toFile(resizedFilePath);
 
-      const fileInfo = await getFileInfo(resizedFilePath);
+      const fileInfoMeta = await getFileInfoMeta(resizedFilePath);
+      const fileInfoPrimary = { id: fileKey.id };
+      const fileInfo: FileInfo = { ...fileInfoMeta, ...fileInfoPrimary };
+
       const readableStream = fs.createReadStream(resizedFilePath);
 
       const contentType = fileInfo.type;
 
-      const key = `${where}/${fileInfo.id}`;
       const response = await this.s3Repository.upload({
-        Key: key,
+        Key: fileKey.key,
         Body: readableStream,
         ContentLength: fileInfo.size,
         ContentType: contentType,

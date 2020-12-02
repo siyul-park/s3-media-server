@@ -4,7 +4,14 @@ import * as AWS from "aws-sdk";
 
 function s3MockProvider(): interfaces.Provider<AWS.S3> {
   return () => {
-    return new AWSMock.S3();
+    const s3Mock = new AWSMock.S3();
+
+    s3Mock.getSignedUrlPromise = (operation, params) => {
+      const result = s3Mock.getSignedUrl(operation, params) as unknown;
+      return (result as any).promise();
+    };
+
+    return s3Mock;
   };
 }
 
