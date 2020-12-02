@@ -18,8 +18,8 @@ class S3DependencyInitializer implements Initializer {
 
   private readonly s3Provider = inContainerScope(
     this.configuration.useMock
-      ? s3Provider(this.configuration)
-      : s3MockProvider()
+      ? s3MockProvider()
+      : s3Provider(this.configuration)
   );
 
   private readonly s3RepositoryFactoryProvider = inContainerScope(

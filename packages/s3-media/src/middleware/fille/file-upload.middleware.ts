@@ -1,29 +1,26 @@
 import Application, { DefaultState } from "koa";
-import { tmpName } from "tmp-promise";
-import * as fs from "fs";
+
+import fs from "fs";
 import Context from "../../type/context";
-import Token from "../../s3/token";
-import pipeline from "../../stream/pipeline";
+import Uploader from "../../service/uploader";
+import Token from "../../service/token";
+import tmpPath from "../../service/tmpPath";
+import pipeline from "../../service/pipeline";
+import unlink from "../../service/unlink";
 
 const fileUploadMiddleware: Application.Middleware<
   DefaultState,
   Context
 > = async (context, next) => {
-  const s3Repository = await context.resolve(Token.S3_REPOSITORY);
+  const uploader: Uploader = await context.resolve(Token.UPLOADER);
 
-  const name = await tmpName();
-  const outStream = fs.createWriteStream(name);
+  const filePath = await tmpPath();
+  const stream = fs.createWriteStream(filePath);
+  await pipeline([context.req, stream]);
 
-  await pipeline([context.req, outStream]);
+  context.body = await uploader.upload(filePath, "original");
 
-  const inStream = fs.createReadStream(name);
-
-  context.body = inStream;
-
-  // await s3Repository.upload({
-  //   Key: "",
-  //   Body: context.req,
-  // });
+  await unlink(filePath);
 
   await next();
 };

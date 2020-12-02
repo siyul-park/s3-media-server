@@ -15,10 +15,15 @@ describe("POST /files/upload", () => {
       path.join(__dirname, "../assets/image/upload-test-image.png")
     );
 
-    const response = request
+    const response = await request
       .post("/files/upload")
       .set("content-type", "application/octet-stream")
-      // .send(img)
+      .send(img)
       .expect(200);
+
+    expect(response.body.id).toBeDefined();
+    expect(response.body.name).toBeDefined();
+    expect(response.body.type).toBeDefined();
+    expect(response.body.size).toBeDefined();
   });
 });

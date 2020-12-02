@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { Server } from "net";
 import Application from "koa";
 import dependency from "@cheeket/koa";

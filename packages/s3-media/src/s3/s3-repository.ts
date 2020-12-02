@@ -1,4 +1,4 @@
-import AWS, { S3 } from "aws-sdk";
+import AWS, {S3} from "aws-sdk";
 
 class S3Repository {
   constructor(public readonly s3: AWS.S3, public readonly bucketName: string) {}
@@ -17,12 +17,16 @@ class S3Repository {
   async getObject(
     params: Omit<S3.Types.GetObjectRequest, "Bucket">
   ): Promise<S3.GetObjectOutput> {
-    return this.s3
-      .getObject({
-        Bucket: this.bucketName,
-        ...params,
-      })
-      .promise();
+    try {
+      return await this.s3
+        .getObject({
+          Bucket: this.bucketName,
+          ...params,
+        })
+        .promise();
+    } catch (e) {
+      return {};
+    }
   }
 
   async copyObject(
