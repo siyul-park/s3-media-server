@@ -1,6 +1,7 @@
 import Application, { DefaultState } from "koa";
 
 import fs from "fs";
+import uniqid from "uniqid";
 import Context from "../../type/context";
 import Uploader from "../../service/uploader";
 import Token from "../../service/token";
@@ -22,7 +23,7 @@ const fileUploadMiddleware: Application.Middleware<
 
     const originalKey = "original";
 
-    const fileInfo = await uploader.upload(originalKey, filePath);
+    const fileInfo = await uploader.upload(originalKey, uniqid(), filePath);
 
     context.body = convertInfoToRelational(fileInfo, [
       { relation: "self", href: `/styles/${originalKey}/${fileInfo.id}` },

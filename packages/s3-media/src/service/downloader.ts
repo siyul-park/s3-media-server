@@ -7,6 +7,7 @@ import S3Repository from "../s3/s3-repository";
 import JsonRepository from "../s3/json-repository";
 import Style from "./style/style";
 import NotFoundError from "../error/not-found-error";
+import FileKey from "../type/file-key";
 
 @injectable()
 class Downloader {
@@ -16,35 +17,30 @@ class Downloader {
     private readonly styleRepository: JsonRepository<Style>
   ) {}
 
-  async fetchDownloadUrl(where: string, id: string): Promise<string> {
-    const link = await this.getDownloadUrl(where, id);
+  async fetchDownloadUrl(fileKey: FileKey): Promise<string> {
+    const link = await this.getDownloadUrl(fileKey);
     if (link === undefined) {
-      throw new NotFoundError(`${where}/${id} not found`);
+      throw new NotFoundError(`${fileKey.key} not found`);
     }
 
     return link;
   }
 
-  async fetchReadStream(where: string, id: string): Promise<stream.Readable> {
-    const readStream = await this.getReadStream(where, id);
+  async fetchReadStream(fileKey: FileKey): Promise<stream.Readable> {
+    const readStream = await this.getReadStream(fileKey);
     if (readStream === undefined) {
-      throw new NotFoundError(`${where}/${id} not found`);
+      throw new NotFoundError(`${fileKey.key} not found`);
     }
 
     return readStream;
   }
 
-  async getDownloadUrl(where: string, id: string): Promise<string | undefined> {
-    const key = `${where}/${id}`;
-    return this.s3Repository.getObjectSignedUrl({ Key: key });
+  async getDownloadUrl(fileKey: FileKey): Promise<string | undefined> {
+    return this.s3Repository.getObjectSignedUrl({ Key: fileKey.key });
   }
 
-  async getReadStream(
-    where: string,
-    id: string
-  ): Promise<stream.Readable | undefined> {
-    const key = `${where}/${id}`;
-    return this.s3Repository.getObjectReadStream({ Key: key });
+  async getReadStream(fileKey: FileKey): Promise<stream.Readable | undefined> {
+    return this.s3Repository.getObjectReadStream({ Key: fileKey.key });
   }
 }
 
