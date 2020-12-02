@@ -9,26 +9,18 @@ beforeAll(async () => {
   request = await createRequest();
 });
 
-describe("POST /files/upload", () => {
+describe("POST /styles/:style_id/:file_id", () => {
   test("success", async () => {
     const img = await fs.promises.readFile(
       path.join(__dirname, "../assets/image/upload-test-image.png")
     );
 
-    const response = await request
+    const { body: fileInfo } = await request
       .post("/files/upload")
       .set("content-type", "application/octet-stream")
       .send(img)
       .expect(200);
 
-    expect(response.body.id).toBeDefined();
-    expect(response.body.name).toBeDefined();
-    expect(response.body.type).toBeDefined();
-
-    expect(response.body.size).toBeDefined();
-    expect(response.body.width).toBeDefined();
-    expect(response.body.height).toBeDefined();
-
-    expect(response.body.links).toBeDefined();
+    await request.get(fileInfo.links[0].href).expect(302);
   });
 });

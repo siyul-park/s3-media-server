@@ -1,4 +1,5 @@
 import AWS, { S3 } from "aws-sdk";
+import * as stream from "stream";
 
 class S3Repository {
   constructor(public readonly s3: AWS.S3, public readonly bucketName: string) {}
@@ -26,6 +27,21 @@ class S3Repository {
         .promise();
     } catch (e) {
       return {};
+    }
+  }
+
+  async getObjectReadStream(
+    params: Omit<S3.Types.GetObjectRequest, "Bucket">
+  ): Promise<stream.Readable | undefined> {
+    try {
+      return this.s3
+        .getObject({
+          Bucket: this.bucketName,
+          ...params,
+        })
+        .createReadStream();
+    } catch (e) {
+      return undefined;
     }
   }
 
@@ -60,6 +76,19 @@ class S3Repository {
         ...params,
       })
       .promise();
+  }
+
+  async getObjectSignedUrl(
+    params: Omit<S3.Types.GetObjectRequest, "Bucket">
+  ): Promise<string | undefined> {
+    try {
+      return await this.s3.getSignedUrlPromise("getObject", {
+        Bucket: this.bucketName,
+        ...params,
+      });
+    } catch (e) {
+      return undefined;
+    }
   }
 }
 

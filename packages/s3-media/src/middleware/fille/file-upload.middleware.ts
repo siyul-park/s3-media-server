@@ -22,10 +22,10 @@ const fileUploadMiddleware: Application.Middleware<
 
     const originalKey = "original";
 
-    const fileInfo = await uploader.upload(filePath, originalKey);
+    const fileInfo = await uploader.upload(originalKey, filePath);
 
     context.body = convertInfoToRelational(fileInfo, [
-      { relation: "self", href: `/${originalKey}/${fileInfo.id}` },
+      { relation: "self", href: `/styles/${originalKey}/${fileInfo.id}` },
     ]);
   } finally {
     await unlink(filePath);

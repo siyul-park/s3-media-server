@@ -21,7 +21,7 @@ class Uploader {
     private readonly styleRepository: JsonRepository<Style>
   ) {}
 
-  async upload(path: string, where: string): Promise<S3FileInfo> {
+  async upload(where: string, path: string): Promise<S3FileInfo> {
     const style = await this.styleRepository.fetch(where);
 
     const resizedFilePath = await tmpPath();
