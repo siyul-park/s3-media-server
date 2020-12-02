@@ -1,6 +1,9 @@
 import NodeCache from "node-cache";
+
 import S3Repository from "./s3-repository";
 import addExtension from "../service/add-extension";
+import NotFoundError from "../error/not-found-error";
+import ConflictError from "../error/conflict-error";
 
 class JsonRepository<T extends { id: string }> {
   private readonly cache = new NodeCache({ stdTTL: 60 * 24 });
@@ -12,7 +15,7 @@ class JsonRepository<T extends { id: string }> {
 
   async create(entity: T): Promise<T> {
     if (await this.forceExist(entity.id)) {
-      throw new Error(`${this.key}/${entity.id} already exists`);
+      throw new ConflictError(`${this.key}/${entity.id} already exists`);
     }
 
     return this.forceSave(entity);
@@ -21,7 +24,7 @@ class JsonRepository<T extends { id: string }> {
   async update(entity: Partial<T> & Pick<T, "id">): Promise<T> {
     const exist = await this.forceFind(entity.id);
     if (exist === undefined) {
-      throw new Error(`${this.key}/${entity.id} not exists`);
+      throw new NotFoundError(`${this.key}/${entity.id} not exists`);
     }
 
     const newOne = { ...exist, ...entity };
@@ -32,7 +35,7 @@ class JsonRepository<T extends { id: string }> {
   async fetch(id: string): Promise<T> {
     const result = await this.find(id);
     if (result === undefined) {
-      throw new Error(`${this.key}/${id} not exists`);
+      throw new NotFoundError(`${this.key}/${id} not exists`);
     }
 
     return result;
