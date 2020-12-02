@@ -31,7 +31,7 @@ const fileDownloadMiddleware: Application.Middleware<
     const stream = fs.createWriteStream(filePath);
     await pipeline([readStream, stream]);
 
-    await uploader.upload(styleId, filePath);
+    await uploader.upload(styleId, filePath, fileId);
 
     context.redirect(await downloader.fetchDownloadUrl(styleId, fileId));
   } finally {

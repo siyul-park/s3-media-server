@@ -22,7 +22,6 @@ describe("POST /files/upload", () => {
       .expect(200);
 
     expect(response.body.id).toBeDefined();
-    expect(response.body.name).toBeDefined();
     expect(response.body.type).toBeDefined();
 
     expect(response.body.size).toBeDefined();

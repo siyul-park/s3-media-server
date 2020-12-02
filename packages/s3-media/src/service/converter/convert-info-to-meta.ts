@@ -4,7 +4,6 @@ function convertInfoToMeta(fileInfo: FileInfo): Record<string, string> {
   const meta: Record<string, string> = {};
 
   meta.id = fileInfo.id;
-  meta.name = fileInfo.name;
   if (fileInfo.type) meta.id = fileInfo.type;
 
   meta.size = fileInfo.size.toString();

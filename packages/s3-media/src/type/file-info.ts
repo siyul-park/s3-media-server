@@ -1,11 +1,7 @@
-interface FileInfo {
-  id: string;
-  name: string;
-  type?: string;
+import FileInfoMeta from "./file-info-meta";
+import FileInfoPrimary from "./file-info-primary";
 
-  size: number;
-  width?: number;
-  height?: number;
+interface FileInfo extends FileInfoPrimary, FileInfoMeta {
 }
 
 export default FileInfo;

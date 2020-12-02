@@ -8,7 +8,6 @@ function convertInfoToRelational(
 ): RelationalFileInfo {
   return {
     id: fileInfo.id,
-    name: fileInfo.name,
     type: fileInfo.type,
     size: fileInfo.size,
     width: fileInfo.width,
