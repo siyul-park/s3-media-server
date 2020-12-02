@@ -8,9 +8,9 @@ import S3Repository from "../s3/s3-repository";
 import JsonRepository from "../s3/json-repository";
 import S3FileInfo from "../type/s3-file-info";
 import getFileInfo from "./get-file-info";
-import tmpPath from "./tmpPath";
+import tmpPath from "./tmp/tmpPath";
 import Style from "./style/style";
-import unlink from "./unlink";
+import unlink from "./fs/unlink";
 
 @injectable()
 class Uploader {

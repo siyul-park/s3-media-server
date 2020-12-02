@@ -3,7 +3,7 @@ import { fromFile } from "file-type";
 import sharp from "sharp";
 
 import FileInfo from "../type/file-info";
-import stat from "./stat";
+import stat from "./fs/stat";
 
 async function getFileInfo(path: string): Promise<FileInfo> {
   const fileStat = await stat(path);

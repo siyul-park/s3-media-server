@@ -4,9 +4,9 @@ import fs from "fs";
 import Context from "../../type/context";
 import Uploader from "../../service/uploader";
 import Token from "../../service/token";
-import tmpPath from "../../service/tmpPath";
-import pipeline from "../../service/pipeline";
-import unlink from "../../service/unlink";
+import tmpPath from "../../service/tmp/tmpPath";
+import pipeline from "../../service/stream/pipeline";
+import unlink from "../../service/fs/unlink";
 
 const fileUploadMiddleware: Application.Middleware<
   DefaultState,

@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import pipeline from "./pipeline";
+import pipeline from "../stream/pipeline";
 import tmpPath from "./tmpPath";
 
 async function uploadForTmp(stream: NodeJS.ReadableStream): Promise<string> {
