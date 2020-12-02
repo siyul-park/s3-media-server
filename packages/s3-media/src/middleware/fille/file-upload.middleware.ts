@@ -1,7 +1,7 @@
 import Application, { DefaultState } from "koa";
-
 import fs from "fs";
 import uniqid from "uniqid";
+
 import Context from "../../type/context";
 import Uploader from "../../service/uploader";
 import Token from "../../service/token";
