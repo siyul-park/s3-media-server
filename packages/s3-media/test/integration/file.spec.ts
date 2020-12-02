@@ -31,4 +31,3 @@ describe("POST /files/upload", () => {
     expect(response.body.links).toBeDefined();
   });
 });
-
