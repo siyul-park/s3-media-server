@@ -1,8 +1,6 @@
 import supertest from "supertest";
-import * as fs from "fs";
-import * as path from "path";
+import uniqid from "uniqid";
 import createRequest from "../create-request";
-import Link from "../../src/type/link";
 
 let request: supertest.SuperTest<supertest.Test>;
 
@@ -14,7 +12,7 @@ describe("POST /styles", () => {
   test("success", async () => {
     const { body } = await request
       .post("/styles")
-      .send({ id: "test" })
+      .send({ id: uniqid() })
       .expect(201);
 
     expect(body.id).toBeDefined();
@@ -32,12 +30,33 @@ describe("GET /styles", () => {
 
 describe("PUT /styles/:style_id", () => {
   test("success", async () => {
+    const id = uniqid();
+    const width = 100;
+
+    await request.post("/styles").send({ id }).expect(201);
     const { body } = await request
-      .put("/styles/test")
-      .send({ id: "test" })
+      .put(`/styles/${id}`)
+      .send({ id, width })
       .expect(200);
 
-    expect(body.id).toBeDefined();
+    expect(body.id).toEqual(id);
+    expect(body.width).toEqual(width);
+  });
+});
+
+describe("PATCH /styles/:style_id", () => {
+  test("success", async () => {
+    const id = uniqid();
+    const width = 100;
+
+    await request.post("/styles").send({ id }).expect(201);
+    const { body } = await request
+      .patch(`/styles/${id}`)
+      .send({ width })
+      .expect(200);
+
+    expect(body.id).toEqual(id);
+    expect(body.width).toEqual(width);
   });
 });
 
