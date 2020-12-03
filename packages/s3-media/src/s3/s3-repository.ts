@@ -30,7 +30,6 @@ class S3Repository {
     }
   }
 
-
   async getObject(
     params: Omit<S3.Types.GetObjectRequest, "Bucket">
   ): Promise<S3.GetObjectOutput> {
