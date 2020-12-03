@@ -20,7 +20,6 @@ class ServiceDependencyInitializer implements Initializer {
     autoInjected(Exchanger)
   );
 
-
   private readonly fileInfoRepositoryProvider = inContainerScope(
     autoInjected(FileInfoRepository)
   );
