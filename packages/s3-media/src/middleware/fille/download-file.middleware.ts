@@ -9,11 +9,14 @@ import unlink from "../../service/fs/unlink";
 import pipeline from "../../service/stream/pipeline";
 import FileKey from "../../type/file-key";
 
-const fileDownloadMiddleware: Application.Middleware<
+const downloadFileMiddleware: Application.Middleware<
   DefaultState,
   Context
 > = async (context, next) => {
   const { styleId, fileId } = context.params;
+
+  context.assert(styleId, 400, "style_id must not be undefined");
+  context.assert(fileId, 400, "file_id must not be undefined");
 
   const currentKey = new FileKey(styleId, fileId);
 
@@ -45,4 +48,4 @@ const fileDownloadMiddleware: Application.Middleware<
   await next();
 };
 
-export default fileDownloadMiddleware;
+export default downloadFileMiddleware;

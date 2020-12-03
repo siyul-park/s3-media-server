@@ -11,7 +11,7 @@ import unlink from "../../service/fs/unlink";
 import convertInfoToRelational from "../../service/converter/convert-info-to-relational";
 import FileKey from "../../type/file-key";
 
-const fileUploadMiddleware: Application.Middleware<
+const uploadFileMiddleware: Application.Middleware<
   DefaultState,
   Context
 > = async (context, next) => {
@@ -36,4 +36,4 @@ const fileUploadMiddleware: Application.Middleware<
   await next();
 };
 
-export default fileUploadMiddleware;
+export default uploadFileMiddleware;

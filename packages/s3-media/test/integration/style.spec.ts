@@ -9,6 +9,15 @@ beforeAll(async () => {
   request = await createRequest();
 });
 
+describe("GET /styles/:style_id", () => {
+  test("success", async () => {
+    const { body } = await request
+      .get("/styles/original")
+      .expect(200);
+
+  });
+});
+
 describe("POST /styles/:style_id/:file_id", () => {
   test("success: get original", async () => {
     const img = await fs.promises.readFile(
