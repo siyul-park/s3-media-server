@@ -12,6 +12,7 @@ function configurationProvider(): Configuration {
     useMock: process.env.AWS_S3_USE_MOCK
       ? process.env.AWS_S3_USE_MOCK === "true"
       : true,
+    signatureVersion: process.env.AWS_S3_SIGNATURE_VERSION,
   };
 }
 export default configurationProvider;
