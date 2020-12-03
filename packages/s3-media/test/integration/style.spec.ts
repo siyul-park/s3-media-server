@@ -13,7 +13,7 @@ beforeAll(async () => {
 describe("POST /styles", () => {
   test("success", async () => {
     const { body } = await request
-      .post(`/styles`)
+      .post("/styles")
       .send({ id: "test" })
       .expect(201);
 
@@ -30,6 +30,17 @@ describe("GET /styles", () => {
   });
 });
 
+describe("PUT /styles/:style_id", () => {
+  test("success", async () => {
+    const { body } = await request
+      .put("/styles/test")
+      .send({ id: "test" })
+      .expect(200);
+
+    expect(body.id).toBeDefined();
+  });
+});
+
 describe("GET /styles/:style_id", () => {
   test("success", async () => {
     const id = "original";
@@ -37,24 +48,5 @@ describe("GET /styles/:style_id", () => {
     const { body } = await request.get(`/styles/${id}`).expect(200);
 
     expect(body.id).toEqual(id);
-  });
-});
-
-describe("POST /styles/:style_id/:file_id", () => {
-  test("success", async () => {
-    const img = await fs.promises.readFile(
-      path.join(__dirname, "../assets/image/upload-test-image.png")
-    );
-
-    const { body: fileInfo } = await request
-      .post("/files/upload")
-      .set("content-type", "application/octet-stream")
-      .send(img)
-      .expect(200);
-
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const link of fileInfo.links as Link[]) {
-      await request.get(link.href).expect(302);
-    }
   });
 });

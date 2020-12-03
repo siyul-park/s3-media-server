@@ -7,7 +7,7 @@ function configurationProvider(): Configuration {
     secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
     endpoint: process.env.AWS_S3_ENDPOINT,
     apiVersion: process.env.AWS_S3_API_VERSION,
-    bucketName: process.env.AWS_S3_BUCKET_NAME ?? "test/assets",
+    bucketName: process.env.AWS_S3_BUCKET_NAME ?? "data",
     region: process.env.AWS_S3_REGION,
     s3ForcePathStyle: process.env.AWS_S3_FORCE_PATH_STYLE
       ? process.env.AWS_S3_FORCE_PATH_STYLE === "true"
