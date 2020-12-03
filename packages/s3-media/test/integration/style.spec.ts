@@ -41,9 +41,10 @@ describe("POST /styles/:style_id/:file_id", () => {
       .send(img)
       .expect(200);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const link of fileInfo.links as Link[]) {
-      await request.get(link.href).expect(302);
-    }
+    await Promise.all(
+      (fileInfo.links as Link[]).map(async (link: Link) => {
+        await request.get(link.href).expect(302);
+      })
+    );
   });
 });
