@@ -5,7 +5,6 @@ import Token from "../../service/token";
 import Uploader from "../../service/uploader";
 import Downloader from "../../service/downloader";
 import tmpPath from "../../service/tmp/tmpPath";
-import unlink from "../../service/fs/unlink";
 import pipeline from "../../service/stream/pipeline";
 import FileKey from "../../type/file-key";
 
@@ -42,7 +41,7 @@ const downloadFileMiddleware: Application.Middleware<
 
     context.redirect(await downloader.fetchDownloadUrl(currentKey));
   } finally {
-    await unlink(filePath);
+    await fs.promises.unlink(filePath);
   }
 
   await next();

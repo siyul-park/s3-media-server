@@ -10,7 +10,6 @@ import S3FileInfo from "../type/s3-file-info";
 import getFileInfoMeta from "./get-file-info-meta";
 import tmpPath from "./tmp/tmpPath";
 import Style from "../type/style";
-import unlink from "./fs/unlink";
 import convertInfoToMeta from "./converter/convert-info-to-meta";
 import FileInfo from "../type/file-info";
 import FileKey from "../type/file-key";
@@ -54,7 +53,7 @@ class Uploader {
         location: response.Location,
       };
     } finally {
-      await unlink(resizedFilePath);
+      await fs.promises.unlink(resizedFilePath);
     }
   }
 }

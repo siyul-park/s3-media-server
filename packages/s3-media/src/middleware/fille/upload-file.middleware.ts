@@ -7,7 +7,6 @@ import Uploader from "../../service/uploader";
 import Token from "../../service/token";
 import tmpPath from "../../service/tmp/tmpPath";
 import pipeline from "../../service/stream/pipeline";
-import unlink from "../../service/fs/unlink";
 import convertInfoToRelational from "../../service/converter/convert-info-to-relational";
 import FileKey from "../../type/file-key";
 import JsonRepository from "../../s3/json-repository";
@@ -38,7 +37,7 @@ const uploadFileMiddleware: Application.Middleware<
       createFileLinks(styles, fileInfo.id)
     );
   } finally {
-    await unlink(filePath);
+    await fs.promises.unlink(filePath);
   }
 
   await next();
