@@ -50,16 +50,23 @@ class JsonRepository<T extends { id: string }> {
   }
 
   async findAll(): Promise<T[]> {
-    const keys = await this.forceList();
-    const ids = keys
-      .map((key) => this.getId(key))
-      .filter((value) => value !== undefined) as string[];
-
+    const ids = await this.list();
     const idMap = new Set<string>(ids);
     this.cache.del(this.cache.keys().filter((id) => !idMap.has(id)));
 
     const result = await Promise.all(ids.map((id) => this.find(id)));
     return result.filter((value) => value !== undefined) as T[];
+  }
+
+  async list(): Promise<string[]> {
+    const data = await this.s3Repository.listObjectsV2({
+      Prefix: `${this.key}/`,
+    });
+
+    const keys = (data.Contents ?? []).map((value) => value.Key) as string[];
+    return keys
+      .map((key) => this.getId(key))
+      .filter((value) => value !== undefined) as string[];
   }
 
   async find(id: string): Promise<T | undefined> {
@@ -91,14 +98,6 @@ class JsonRepository<T extends { id: string }> {
     }
 
     return json as T | undefined;
-  }
-
-  async forceList(): Promise<string[]> {
-    const data = await this.s3Repository.listObjectsV2({
-      Prefix: `${this.key}/`,
-    });
-
-    return (data.Contents ?? []).map((value) => value.Key) as string[];
   }
 
   async forceExist(id: string): Promise<boolean> {
