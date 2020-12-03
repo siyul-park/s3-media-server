@@ -11,10 +11,11 @@ beforeAll(async () => {
 
 describe("GET /styles/:style_id", () => {
   test("success", async () => {
-    const { body } = await request
-      .get("/styles/original")
-      .expect(200);
+    const id = "original";
 
+    const { body } = await request.get(`/styles/${id}`).expect(200);
+
+    expect(body.id).toEqual(id);
   });
 });
 
