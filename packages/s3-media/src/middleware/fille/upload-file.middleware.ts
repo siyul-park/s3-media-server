@@ -28,7 +28,7 @@ const uploadFileMiddleware: Application.Middleware<
     const stream = fs.createWriteStream(filePath);
     await pipeline([context.req, stream]);
 
-    const originalKey = new FileKey("original", uniqid());
+    const originalKey = FileKey.fromOrigin(uniqid());
 
     const fileInfo = await uploader.upload(originalKey, filePath);
     const styles = await styleRepository.list();

@@ -30,7 +30,7 @@ const downloadFileMiddleware: Application.Middleware<
     return;
   }
 
-  const originalKey = new FileKey("original", fileId);
+  const originalKey = FileKey.fromOrigin(fileId);
   const readStream = await downloader.fetchReadStream(originalKey);
   const filePath = await tmpPath();
 
