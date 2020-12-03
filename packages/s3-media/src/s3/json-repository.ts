@@ -50,7 +50,7 @@ class JsonRepository<T extends { id: string }> {
   }
 
   async findAll(): Promise<T[]> {
-    const ids = await this.list();
+    const ids = await this.findAllIds();
     const idMap = new Set<string>(ids);
     this.cache.del(this.cache.keys().filter((id) => !idMap.has(id)));
 
@@ -58,7 +58,7 @@ class JsonRepository<T extends { id: string }> {
     return result.filter((value) => value !== undefined) as T[];
   }
 
-  async list(): Promise<string[]> {
+  async findAllIds(): Promise<string[]> {
     const data = await this.s3Repository.listObjectsV2({
       Prefix: `${this.key}/`,
     });

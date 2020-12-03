@@ -31,7 +31,7 @@ const uploadFileMiddleware: Application.Middleware<
     const originalKey = FileKey.fromOrigin(uniqid());
 
     const fileInfo = await uploader.upload(originalKey, filePath);
-    const styles = await styleRepository.list();
+    const styles = await styleRepository.findAllIds();
 
     context.body = convertInfoToRelational(
       fileInfo,
