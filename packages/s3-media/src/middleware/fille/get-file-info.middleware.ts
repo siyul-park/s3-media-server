@@ -32,7 +32,7 @@ const getFileInfoMiddleware: Application.Middleware<
   const originalKey = FileKey.fromOrigin(fileId);
 
   await exchanger.exchange(originalKey, currentKey);
-  context.body = await fileInfoRepository.findById(currentKey);
+  context.body = await fileInfoRepository.fetchById(currentKey);
 
   await next();
 };
