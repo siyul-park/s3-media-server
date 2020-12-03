@@ -1,5 +1,10 @@
 import Router from "koa-router";
-import { requestBody } from "koa-change-case";
+import {
+  camelCase,
+  snakeCase,
+  requestBody,
+  responseBody,
+} from "koa-change-case";
 import bodyParser from "koa-bodyparser";
 
 import Context from "../type/context";
@@ -14,7 +19,7 @@ const router = new Router<never, Context>();
 
 router.prefix("/styles");
 
-router.use(bodyParser());
+router.use(bodyParser(), camelCase(requestBody));
 
 router.get("/", getStylesMiddleware);
 router.post(
@@ -29,5 +34,7 @@ router.put(
   validateMiddleware(styleSchema, requestBody),
   upsertStyleMiddleware
 );
+
+router.use(snakeCase(responseBody));
 
 export default router;
