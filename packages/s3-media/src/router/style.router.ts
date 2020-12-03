@@ -16,6 +16,7 @@ import validateMiddleware from "../middleware/validate.middleware";
 import createStyleMiddleware from "../middleware/style/create-style.middleware";
 import upsertStyleMiddleware from "../middleware/style/upsert-style.middleware";
 import updateStyleMiddleware from "../middleware/style/update-style.middleware";
+import deleteStyleMiddleware from "../middleware/style/delete-style.middleware";
 
 const router = new Router<never, Context>();
 
@@ -41,6 +42,7 @@ router.patch(
   validateMiddleware(stylePatchSchema, requestBody),
   updateStyleMiddleware
 );
+router.delete("/:styleId", deleteStyleMiddleware);
 
 router.use(snakeCase(responseBody));
 

@@ -60,6 +60,15 @@ describe("PATCH /styles/:style_id", () => {
   });
 });
 
+describe("DELETE /styles/:style_id", () => {
+  test("success", async () => {
+    const id = uniqid();
+
+    await request.post("/styles").send({ id }).expect(201);
+    await request.delete(`/styles/${id}`).expect(204);
+  });
+});
+
 describe("GET /styles/:style_id", () => {
   test("success", async () => {
     const id = "original";
