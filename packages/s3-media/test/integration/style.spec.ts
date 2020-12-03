@@ -10,6 +10,17 @@ beforeAll(async () => {
   request = await createRequest();
 });
 
+describe("POST /styles", () => {
+  test("success", async () => {
+    const { body } = await request
+      .post(`/styles`)
+      .send({ id: "test" })
+      .expect(201);
+
+    expect(body.id).toBeDefined();
+  });
+});
+
 describe("GET /styles", () => {
   test("success", async () => {
     const { body } = await request.get(`/styles`).expect(200);

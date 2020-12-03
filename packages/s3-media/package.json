@@ -18,6 +18,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "@types/koa": "^2.11.6",
+    "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.1",
     "@types/mock-aws-s3": "^2.6.1",
     "@types/node": "^14.14.10",
@@ -44,6 +45,7 @@
     "got": "^11.8.0",
     "joi": "^17.3.0",
     "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
     "koa-change-case": "^1.0.2",
     "koa-router": "^10.0.0",
     "mock-aws-s3": "^4.0.1",
