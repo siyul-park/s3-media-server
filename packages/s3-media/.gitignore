@@ -118,5 +118,4 @@ dist
 # intelliJ
 .idea/
 
-test/assets/original
-test/assets/thumbnail
+data

@@ -15,6 +15,21 @@ class S3Repository {
       .promise();
   }
 
+  async listObjectsV2(
+    params: Omit<S3.Types.ListObjectsV2Request, "Bucket">
+  ): Promise<S3.ListObjectsV2Output> {
+    try {
+      return await this.s3
+        .listObjectsV2({
+          Bucket: this.bucketName,
+          ...params,
+        })
+        .promise();
+    } catch (e) {
+      return {};
+    }
+  }
+
   async getObject(
     params: Omit<S3.Types.GetObjectRequest, "Bucket">
   ): Promise<S3.GetObjectOutput> {
@@ -59,12 +74,16 @@ class S3Repository {
   async headObject(
     params: Omit<S3.Types.HeadObjectRequest, "Bucket">
   ): Promise<S3.HeadObjectOutput> {
-    return this.s3
-      .headObject({
-        Bucket: this.bucketName,
-        ...params,
-      })
-      .promise();
+    try {
+      return await this.s3
+        .headObject({
+          Bucket: this.bucketName,
+          ...params,
+        })
+        .promise();
+    } catch (e) {
+      return {};
+    }
   }
 
   async upload(

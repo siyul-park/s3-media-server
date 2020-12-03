@@ -2,6 +2,7 @@ import supertest from "supertest";
 import * as fs from "fs";
 import * as path from "path";
 import createRequest from "../create-request";
+import Link from "../../src/type/link";
 
 let request: supertest.SuperTest<supertest.Test>;
 
@@ -9,32 +10,43 @@ beforeAll(async () => {
   request = await createRequest();
 });
 
-describe("POST /styles/:style_id/:file_id", () => {
-  test("success: get original", async () => {
-    const img = await fs.promises.readFile(
-      path.join(__dirname, "../assets/image/upload-test-image.png")
-    );
+describe("POST /styles", () => {
+  test("success", async () => {
+    const { body } = await request
+      .post("/styles")
+      .send({ id: "test" })
+      .expect(201);
 
-    const { body: fileInfo } = await request
-      .post("/files/upload")
-      .set("content-type", "application/octet-stream")
-      .send(img)
-      .expect(200);
-
-    await request.get(fileInfo.links[0].href).expect(302);
+    expect(body.id).toBeDefined();
   });
+});
 
-  test("success: get thumbnail", async () => {
-    const img = await fs.promises.readFile(
-      path.join(__dirname, "../assets/image/upload-test-image.png")
-    );
+describe("GET /styles", () => {
+  test("success", async () => {
+    const { body } = await request.get(`/styles`).expect(200);
 
-    const { body: fileInfo } = await request
-      .post("/files/upload")
-      .set("content-type", "application/octet-stream")
-      .send(img)
+    expect(body.length).toBeGreaterThan(0);
+    expect(body[0].id).toBeDefined();
+  });
+});
+
+describe("PUT /styles/:style_id", () => {
+  test("success", async () => {
+    const { body } = await request
+      .put("/styles/test")
+      .send({ id: "test" })
       .expect(200);
 
-    await request.get(`/styles/thumbnail/${fileInfo.id}`).expect(302);
+    expect(body.id).toBeDefined();
+  });
+});
+
+describe("GET /styles/:style_id", () => {
+  test("success", async () => {
+    const id = "original";
+
+    const { body } = await request.get(`/styles/${id}`).expect(200);
+
+    expect(body.id).toEqual(id);
   });
 });

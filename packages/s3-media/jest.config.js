@@ -12,5 +12,6 @@ module.exports = {
     'ts-jest': {
       'diagnostics': true
     }
-  }
+  },
+  setupFiles: ["./test/set-up.ts"]
 };

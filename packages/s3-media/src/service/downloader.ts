@@ -5,7 +5,7 @@ import S3Token from "../s3/token";
 import Token from "./token";
 import S3Repository from "../s3/s3-repository";
 import JsonRepository from "../s3/json-repository";
-import Style from "./style/style";
+import Style from "../type/style";
 import NotFoundError from "../error/not-found-error";
 import FileKey from "../type/file-key";
 
@@ -36,6 +36,10 @@ class Downloader {
   }
 
   async getDownloadUrl(fileKey: FileKey): Promise<string | undefined> {
+    const head = await this.s3Repository.headObject({ Key: fileKey.key });
+    if (head.Metadata === undefined) {
+      return undefined;
+    }
     return this.s3Repository.getObjectSignedUrl({ Key: fileKey.key });
   }
 
