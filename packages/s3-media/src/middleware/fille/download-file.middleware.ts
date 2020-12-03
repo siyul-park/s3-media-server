@@ -1,12 +1,7 @@
 import Application, { DefaultState } from "koa";
-import fs from "fs";
-import uniqid from "uniqid";
 import Context from "../../type/context";
 import Token from "../../service/token";
-import Uploader from "../../service/uploader";
 import Downloader from "../../service/downloader";
-import tmpPath from "../../service/tmp/tmpPath";
-import pipeline from "../../service/stream/pipeline";
 import FileKey from "../../type/file-key";
 import Exchanger from "../../service/exchanger";
 

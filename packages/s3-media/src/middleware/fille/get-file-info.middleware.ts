@@ -4,7 +4,6 @@ import Context from "../../type/context";
 import Token from "../../service/token";
 import FileKey from "../../type/file-key";
 import FileInfoRepository from "../../service/file-info-repository";
-import Downloader from "../../service/downloader";
 import Exchanger from "../../service/exchanger";
 
 const getFileInfoMiddleware: Application.Middleware<
