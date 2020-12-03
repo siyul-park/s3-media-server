@@ -1,5 +1,6 @@
 import Application, { DefaultState } from "koa";
 import fs from "fs";
+import uniqid from "uniqid";
 import Context from "../../type/context";
 import Token from "../../service/token";
 import Uploader from "../../service/uploader";
@@ -7,6 +8,7 @@ import Downloader from "../../service/downloader";
 import tmpPath from "../../service/tmp/tmpPath";
 import pipeline from "../../service/stream/pipeline";
 import FileKey from "../../type/file-key";
+import Exchanger from "../../service/exchanger";
 
 const downloadFileMiddleware: Application.Middleware<
   DefaultState,
@@ -20,7 +22,7 @@ const downloadFileMiddleware: Application.Middleware<
   const currentKey = new FileKey(styleId, fileId);
 
   const downloader: Downloader = await context.resolve(Token.DOWNLOADER);
-  const uploader: Uploader = await context.resolve(Token.UPLOADER);
+  const exchanger: Exchanger = await context.resolve(Token.EXCHANGER);
 
   const downloadUrl = await downloader.getDownloadUrl(currentKey);
   if (downloadUrl !== undefined) {
@@ -30,19 +32,9 @@ const downloadFileMiddleware: Application.Middleware<
   }
 
   const originalKey = FileKey.fromOrigin(fileId);
-  const readStream = await downloader.fetchReadStream(originalKey);
-  const filePath = await tmpPath();
 
-  try {
-    const stream = fs.createWriteStream(filePath);
-    await pipeline([readStream, stream]);
-
-    await uploader.upload(currentKey, filePath);
-
-    context.redirect(await downloader.fetchDownloadUrl(currentKey));
-  } finally {
-    await fs.promises.unlink(filePath);
-  }
+  await exchanger.exchange(originalKey, currentKey);
+  context.redirect(await downloader.fetchDownloadUrl(currentKey));
 
   await next();
 };

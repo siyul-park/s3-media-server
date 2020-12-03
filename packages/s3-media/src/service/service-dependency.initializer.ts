@@ -7,6 +7,7 @@ import Uploader from "./uploader";
 import styleRepositoryProvider from "./style-repository.provider";
 import Downloader from "./downloader";
 import FileInfoRepository from "./file-info-repository";
+import Exchanger from "./exchanger";
 
 class ServiceDependencyInitializer implements Initializer {
   private readonly uploaderProvider = inContainerScope(autoInjected(Uploader));
@@ -14,6 +15,11 @@ class ServiceDependencyInitializer implements Initializer {
   private readonly downloaderProvider = inContainerScope(
     autoInjected(Downloader)
   );
+
+  private readonly exchangerProvider = inContainerScope(
+    autoInjected(Exchanger)
+  );
+
 
   private readonly fileInfoRepositoryProvider = inContainerScope(
     autoInjected(FileInfoRepository)
@@ -26,6 +32,7 @@ class ServiceDependencyInitializer implements Initializer {
   initRootContainer(container: interfaces.Container): void {
     container.bind(Token.UPLOADER, this.uploaderProvider);
     container.bind(Token.DOWNLOADER, this.downloaderProvider);
+    container.bind(Token.EXCHANGER, this.exchangerProvider);
     container.bind(Token.STYLE_REPOSITORY, this.styleRepositoryProvider);
     container.bind(Token.FILE_INFO_REPOSITORY, this.fileInfoRepositoryProvider);
   }
