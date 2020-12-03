@@ -49,6 +49,19 @@ class JsonRepository<T extends { id: string }> {
     return this.forceSave(await provider());
   }
 
+  async findAll(): Promise<T[]> {
+    const keys = await this.forceList();
+    const ids = keys
+      .map((key) => this.getId(key))
+      .filter((value) => value !== undefined) as string[];
+
+    const idMap = new Set<string>(ids);
+    this.cache.del(this.cache.keys().filter((id) => !idMap.has(id)));
+
+    const result = await Promise.all(ids.map((id) => this.find(id)));
+    return result.filter((value) => value !== undefined) as T[];
+  }
+
   async find(id: string): Promise<T | undefined> {
     return this.getOrSet(id, async () => this.forceFind(id));
   }
@@ -80,6 +93,14 @@ class JsonRepository<T extends { id: string }> {
     return json as T | undefined;
   }
 
+  async forceList(): Promise<string[]> {
+    const data = await this.s3Repository.listObjectsV2({
+      Prefix: `${this.key}/`,
+    });
+
+    return (data.Contents ?? []).map((value) => value.Key) as string[];
+  }
+
   async forceExist(id: string): Promise<boolean> {
     const data = await this.s3Repository.headObject({
       Key: this.getKey(id),
@@ -93,6 +114,10 @@ class JsonRepository<T extends { id: string }> {
 
   private getKey(id: string): string {
     return addExtension(`${this.key}/${id}`, "json");
+  }
+
+  private getId(key: string): string | undefined {
+    return key.split(`${this.key}/`).pop()?.split(".json")?.[0];
   }
 
   private async getOrSet<T>(

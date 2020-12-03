@@ -9,6 +9,15 @@ beforeAll(async () => {
   request = await createRequest();
 });
 
+describe("GET /styles", () => {
+  test("success", async () => {
+    const { body } = await request.get(`/styles`).expect(200);
+
+    expect(body.length).toBeGreaterThan(0);
+    expect(body[0].id).toBeDefined();
+  });
+});
+
 describe("GET /styles/:style_id", () => {
   test("success", async () => {
     const id = "original";
