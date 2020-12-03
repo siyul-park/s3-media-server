@@ -111,14 +111,6 @@ class JsonRepository<T extends { id: string }> {
     return isExist;
   }
 
-  private getKey(id: string): string {
-    return addExtension(`${this.key}/${id}`, "json");
-  }
-
-  private getId(key: string): string | undefined {
-    return key.split(`${this.key}/`).pop()?.split(".json")?.[0];
-  }
-
   private async getOrSet<T>(
     id: string,
     provider: () => T | Promise<T>
@@ -136,6 +128,14 @@ class JsonRepository<T extends { id: string }> {
     }
 
     return newOne;
+  }
+
+  private getKey(id: string): string {
+    return addExtension(`${this.key}/${id}`, "json");
+  }
+
+  private getId(key: string): string | undefined {
+    return key.split(`${this.key}/`).pop()?.split(".json")?.[0];
   }
 }
 
