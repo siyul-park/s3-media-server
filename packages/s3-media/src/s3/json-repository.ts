@@ -63,7 +63,7 @@ class JsonRepository<T extends { id: string }> {
       Prefix: `${this.key}/`,
     });
 
-    const keys = (data.Contents ?? []).map((value) => value.Key) as string[];
+    const keys = (data?.Contents ?? []).map((value) => value.Key) as string[];
     return keys
       .map((key) => this.getId(key))
       .filter((value) => value !== undefined) as string[];
@@ -71,6 +71,13 @@ class JsonRepository<T extends { id: string }> {
 
   async find(id: string): Promise<T | undefined> {
     return this.getOrSet(id, async () => this.forceFind(id));
+  }
+
+  async delete(id: string): Promise<void> {
+    if (!(await this.forceExist(id))) {
+      throw new NotFoundError(`${this.key}/${id} not exists`);
+    }
+    await this.forceDelete(id);
   }
 
   async forceSave(style: T): Promise<T> {
@@ -89,7 +96,7 @@ class JsonRepository<T extends { id: string }> {
       Key: this.getKey(id),
     });
     const json =
-      data.Body === undefined ? undefined : JSON.parse(data.Body.toString());
+      data?.Body === undefined ? undefined : JSON.parse(data.Body.toString());
 
     if (json === undefined) {
       this.cache.del(id);
@@ -105,10 +112,15 @@ class JsonRepository<T extends { id: string }> {
       Key: this.getKey(id),
     });
 
-    const isExist = data.Metadata !== undefined;
+    const isExist = data !== undefined;
     if (!isExist) this.cache.del(id);
 
     return isExist;
+  }
+
+  async forceDelete(id: string): Promise<void> {
+    await this.s3Repository.deleteObject({ Key: this.getKey(id) });
+    this.cache.del(id);
   }
 
   private async getOrSet<T>(
