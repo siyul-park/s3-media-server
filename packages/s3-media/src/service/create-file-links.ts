@@ -5,11 +5,11 @@ function createFileLinks(styles: string[], id: string): Link[] {
   styles.forEach((style) => {
     links.push(
       {
-        relation: `bin/${style}`,
+        relation: `bin.${style}`,
         href: `/bins/${style}/${id}`,
       },
       {
-        relation: `meta/${style}`,
+        relation: `meta.${style}`,
         href: `/metas/${style}/${id}`,
       }
     );
