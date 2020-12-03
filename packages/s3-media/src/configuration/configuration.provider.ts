@@ -2,6 +2,8 @@ import Configuration from "./configuration";
 
 function configurationProvider(): Configuration {
   return {
+    accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
     endpoint: process.env.AWS_S3_ENDPOINT,
     apiVersion: process.env.AWS_S3_API_VERSION,
     bucketName: process.env.AWS_S3_BUCKET_NAME ?? "test/assets",
