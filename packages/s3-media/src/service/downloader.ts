@@ -37,7 +37,7 @@ class Downloader {
 
   async getDownloadUrl(fileKey: FileKey): Promise<string | undefined> {
     const head = await this.s3Repository.headObject({ Key: fileKey.key });
-    if (head.Metadata === undefined) {
+    if (head === undefined) {
       return undefined;
     }
     return this.s3Repository.getObjectSignedUrl({ Key: fileKey.key });
