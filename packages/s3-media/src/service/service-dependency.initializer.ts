@@ -4,7 +4,7 @@ import { autoInjected } from "@cheeket/injector";
 
 import Token from "./token";
 import Uploader from "./uploader";
-import styleRepositoryProvider from "./style/style-repository.provider";
+import styleRepositoryProvider from "./style-repository.provider";
 import Downloader from "./downloader";
 
 class ServiceDependencyInitializer implements Initializer {

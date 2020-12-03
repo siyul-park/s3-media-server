@@ -11,7 +11,7 @@ import unlink from "../../service/fs/unlink";
 import convertInfoToRelational from "../../service/converter/convert-info-to-relational";
 import FileKey from "../../type/file-key";
 import JsonRepository from "../../s3/json-repository";
-import Style from "../../service/style/style";
+import Style from "../../type/style";
 import createFileLinks from "../../service/create-file-links";
 
 const uploadFileMiddleware: Application.Middleware<

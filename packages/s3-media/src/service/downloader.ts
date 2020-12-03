@@ -5,7 +5,7 @@ import S3Token from "../s3/token";
 import Token from "./token";
 import S3Repository from "../s3/s3-repository";
 import JsonRepository from "../s3/json-repository";
-import Style from "./style/style";
+import Style from "../type/style";
 import NotFoundError from "../error/not-found-error";
 import FileKey from "../type/file-key";
 

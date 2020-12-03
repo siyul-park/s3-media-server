@@ -1,7 +1,7 @@
 import Application, { DefaultState } from "koa";
 import Context from "../../type/context";
 import JsonRepository from "../../s3/json-repository";
-import Style from "../../service/style/style";
+import Style from "../../type/style";
 import Token from "../../service/token";
 
 const getStyleMiddleware: Application.Middleware<
