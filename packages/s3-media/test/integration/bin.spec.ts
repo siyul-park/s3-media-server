@@ -10,7 +10,7 @@ beforeAll(async () => {
   request = await createRequest();
 });
 
-describe("POST /bin/:style_id/:file_id", () => {
+describe("POST /bins/:style_id/:file_id", () => {
   test("success", async () => {
     const img = await fs.promises.readFile(
       path.join(__dirname, "../assets/image/upload-test-image.png")

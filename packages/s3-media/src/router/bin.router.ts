@@ -5,7 +5,7 @@ import downloadFileMiddleware from "../middleware/fille/download-file.middleware
 
 const router = new Router<never, Context>();
 
-router.prefix("/bin");
+router.prefix("/bins");
 
 router.get("/:styleId/:fileId", downloadFileMiddleware);
 
