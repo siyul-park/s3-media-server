@@ -24,7 +24,7 @@ class FileInfoRepository {
 
   async findById(fileKey: FileKey): Promise<FileInfo | undefined> {
     const fileInfo = await this.s3Repository.headObject({ Key: fileKey.key });
-    if (fileInfo.Metadata === undefined) {
+    if (fileInfo?.Metadata === undefined) {
       return undefined;
     }
 

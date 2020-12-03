@@ -4,6 +4,7 @@ import Context from "../../type/context";
 import Token from "../../service/token";
 import FileKey from "../../type/file-key";
 import FileInfoRepository from "../../service/file-info-repository";
+import Exchanger from "../../service/exchanger";
 
 const getFileInfoMiddleware: Application.Middleware<
   DefaultState,
@@ -19,8 +20,19 @@ const getFileInfoMiddleware: Application.Middleware<
   const fileInfoRepository: FileInfoRepository = await context.resolve(
     Token.FILE_INFO_REPOSITORY
   );
+  const exchanger: Exchanger = await context.resolve(Token.EXCHANGER);
 
-  context.body = await fileInfoRepository.fetchById(currentKey);
+  const fileInfo = await fileInfoRepository.findById(currentKey);
+  if (fileInfo !== undefined) {
+    context.body = fileInfo;
+    await next();
+    return;
+  }
+
+  const originalKey = FileKey.fromOrigin(fileId);
+
+  await exchanger.exchange(originalKey, currentKey);
+  context.body = await fileInfoRepository.findById(currentKey);
 
   await next();
 };
