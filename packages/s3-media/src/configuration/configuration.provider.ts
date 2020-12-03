@@ -2,6 +2,7 @@ import Configuration from "./configuration";
 
 function configurationProvider(): Configuration {
   return {
+    // TODO(환경 변수 사용하게 수정)
     accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
     endpoint: process.env.AWS_S3_ENDPOINT,
